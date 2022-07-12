@@ -14,8 +14,16 @@ root.render(
       <BrowserRouter>
         <Routes>
           <Route path='/' element={<App/>}>
-            <Route path='/Home' element={<Home/>}></Route>
-            <Route path='/Doc' element={<Doc/>}>
+            <Route path='Home' element={<Home/>}></Route>
+            <Route path='Doc' element={<Doc/>}>
+              <Route
+                index
+                element={
+                  <main style={{ padding: 0 }}>
+                    <p>aaaaaaaa index</p>
+                  </main>
+                }
+              />
               <Route path='/Doc/:id' element={<DocSub/>}></Route>
             </Route>
           </Route>
@@ -24,7 +32,7 @@ root.render(
             path="*"
             element={
               <main style={{ padding: 0 }}>
-                <p>There's nothing here!</p>
+                <p>404</p>
               </main>
             }
           />
