@@ -1,10 +1,14 @@
-import {Link, Outlet, NavLink, useSearchParams} from 'react-router-dom';
+import { Outlet, NavLink, useSearchParams, useLocation, useParams, useNavigate} from 'react-router-dom';
 import { getInvoices } from "../data";
 
 export default function Doc(){
     let invoices = getInvoices();
     let [searchParams, setSearchParams] = useSearchParams();
-
+    let location = useLocation();
+    let params = useParams();
+    let navigate = useNavigate();
+    console.log(location, params, searchParams);
+    console.log(Array.from(searchParams))
     return (
         <div>
             <h2>this is doc</h2>
@@ -12,12 +16,27 @@ export default function Doc(){
             <input
                 value={searchParams.get("filter") || ""}
                 onChange={(event) => {
+                    
                     let filter = event.target.value;
                     if (filter) {
                     setSearchParams({ filter });
                     } else {
                     setSearchParams({});
                     }
+                    let arr = Array.from(searchParams);
+                    console.log(searchParams, arr);
+                    if(searchParams.get('filter') === null && filter){
+                        arr.push(['filter', filter])
+                    }
+                    let str = '';
+                    arr.forEach(([key, value]) => {
+                        if(key === 'filter'){
+                            value = filter;
+                        }
+                        str+= (key + '=' + value + '&');
+                    })
+                    console.log(str, searchParams.get('filter'));
+                    navigate("/Doc?" + str)
                 }}
             />
             {invoices
@@ -42,7 +61,7 @@ export default function Doc(){
                         color: isActive ? "red" : "",
                     };
                     }}
-                    to={`/Doc/${invoice.number}`}
+                    to={`/Doc/${invoice.number}${location.search}`}
                     className={({isActive}) => {
                         return isActive? 'red': '';
                     }}
