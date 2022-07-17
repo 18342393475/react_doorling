@@ -37,7 +37,9 @@ root.render(
             }
           />
         </Routes>
-
+        <Routes>
+          <Route path='Home' element={<Home/>}></Route> 
+        </Routes>
       </BrowserRouter>
     </React.StrictMode>
 );

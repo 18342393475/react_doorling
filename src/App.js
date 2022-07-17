@@ -1,4 +1,4 @@
-import {Link, Outlet} from 'react-router-dom'
+import {Link, NavLink, Outlet} from 'react-router-dom'
 import logo from './logo.svg';
 import './App.css';
 
@@ -9,7 +9,7 @@ function App() {
       <h1>Bookkeeper!</h1>
       <div>
         <Link to="/home"> home page</Link>
-        <Link to="/doc"> doc page</Link>
+        <NavLink to="/doc" end style={({isActive}) => { return {color: isActive? 'red': ''}}}> doc page</NavLink>
       </div>
       <Outlet />
     </div>

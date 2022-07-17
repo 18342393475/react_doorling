@@ -66,6 +66,7 @@ export default function Doc(){
                         return isActive? 'red': '';
                     }}
                     key={invoice.number}
+                    end
                 >
                     {invoice.name}
                 </NavLink>
