@@ -1,18 +1,16 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
-import { BrowserRouter, Routes, Route, } from "react-router-dom";
+import { BrowserRouter} from "react-router-dom";
 import './index.css';
-import App from './App';
-import Home from './pages/home';
-import Doc from './pages/doc';
-import DocSub from './pages/docSub'
+import Main from './main.js'
 import reportWebVitals from './reportWebVitals';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
     <React.StrictMode>
       <BrowserRouter>
-        <Routes>
+        <Main/>
+        {/* <Routes>
           <Route path='/' element={<App/>}>
             <Route path='Home' element={<Home/>}></Route>
             <Route path='Doc' element={<Doc/>}>
@@ -26,20 +24,16 @@ root.render(
               />
               <Route path='/Doc/:id' element={<DocSub/>}></Route>
             </Route>
+            <Route
+              path="*"
+              element={
+                <main style={{ padding: 0 }}>
+                  <p>404</p>
+                </main>
+              }
+            />
           </Route>
-          
-          <Route
-            path="*"
-            element={
-              <main style={{ padding: 0 }}>
-                <p>404</p>
-              </main>
-            }
-          />
-        </Routes>
-        <Routes>
-          <Route path='Home' element={<Home/>}></Route> 
-        </Routes>
+        </Routes> */}
       </BrowserRouter>
     </React.StrictMode>
 );
