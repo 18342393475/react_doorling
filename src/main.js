@@ -1,8 +1,10 @@
-
 import { useRoutes } from "react-router-dom"
-import config from "./router-config"
+import config from './router-config'
 
-export default function Main(){
-    console.log(config);
-    return useRoutes(config);
+export default function RouterConfig(){
+    let element = useRoutes(config);
+    console.log(element)
+    return (
+        element
+    )
 }
