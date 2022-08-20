@@ -7,27 +7,7 @@ import {
   } from '@ant-design/icons';
   import { Tree } from 'antd';
   import React, {useState } from 'react';
-  
-  const treeData = [
-    {
-      title: 'parent 1',
-      key: '0-0',
-      icon: <SmileOutlined />,
-      children: [
-        {
-          title: 'leaf',
-          key: '0-0-0',
-          icon: <MehOutlined />,
-        },
-        {
-          title: 'leaf',
-          key: '0-0-1',
-          icon: ({ selected }) => (selected ? <FrownFilled /> : <FrownOutlined />),
-        },
-      ],
-    },
-  ];
-
+import { useEffect } from 'react';
 
   const initTreeData = [
     {
@@ -43,59 +23,61 @@ import {
       key: '2',
       isLeaf: true,
     },
-  ];
+  ]; // It's just a simple demo. You can use tree map to optimize update perf.
   
   const updateTreeData = (list, key, children) =>
     list.map((node) => {
-        if (node.key === key) {
-            return { ...node, children };
-        }
-
-        if (node.children) {
-            return { ...node, children: updateTreeData(node.children, key, children) };
-        }
-
-        return node;
+      if (node.key === key) {
+        return { ...node, children };
+      }
+  
+      if (node.children) {
+        return { ...node, children: updateTreeData(node.children, key, children) };
+      }
+  
+      return node;
     });
-
-
-export default function AreaZtree(){
+  
+  const AreaZtree = () => {
     const [treeData, setTreeData] = useState(initTreeData);
+    useEffect(() => {}, [])
+    let a = true;
+    const onLoadData = (treeNode) =>{
+      let { key, children } = treeNode;
+      
+      return new Promise((resolve) => {
+        if(!a){
+          resolve();
+          return;
+        }
+        a = false;
 
-    const onLoadData = ({ key, children }) =>{
-        console.log(key, children)
-        return new Promise((resolve) => {
-            if (children) {
-                resolve();
-                return;
-            }
+        console.log(key, children);
+        if (children) {
+          a = true;
+          resolve();
+          return;
+        }
 
-            setTimeout(() => {
-                setTreeData((origin) => {
-                    console.log(origin);
-                    return updateTreeData(origin, key, [
-                        {
-                        title: 'Child Node',
-                        key: `${key}-0`,
-                        },
-                        {
-                        title: 'Child Node',
-                        key: `${key}-1`,
-                        },
-                    ])
-                });
-                resolve();
-            }, 1000);
-        })
-    };
-
-    return (
-        <Tree
-        loadData={onLoadData}
-        showIcon
-        // defaultExpandAll
-        // defaultSelectedKeys={['0-0-0']}
-        treeData={treeData}
-        />
-    )
-}
+        setTimeout(() => {
+          setTreeData((origin) =>{
+              console.log(origin);
+              return updateTreeData(origin, key, [
+                {
+                  title: 'Child Node',
+                  key: `${key}-0`,
+                },
+                {
+                  title: 'Child Node',
+                  key: `${key}-1`,
+                },
+              ])
+          });
+          a = true;
+          resolve();
+        }, 1000);
+      });
+    }
+    return <Tree loadData={onLoadData} treeData={treeData} />;
+  };
+  export default AreaZtree
