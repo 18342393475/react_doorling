@@ -1,9 +1,10 @@
 import { Input, Button, Form, Select } from 'antd';
+import React, {useState} from 'react';
+import { useEffect } from 'react';
 const { Option } = Select;
 
 const SearchForm = (props) => {
-    console.log(props);
-
+    // console.log(props);
     const [form] = Form.useForm();
     const onFinish = (value) => {
         console.log(value)
@@ -35,12 +36,27 @@ const SearchForm = (props) => {
                 break;
         }
     };
+    const onValuesChange = (changedValues, allValues) => {
+        let data = form.getFieldsValue(true);
+        console.log(changedValues, allValues, data);
+        // props.onChange(data);
+    }
+    const onFieldsChange = (changedFields, allFields) => {
+        let data = form.getFieldsValue(true);
+        console.log(changedFields, allFields, data);
+        props.onChange(data);
+    }
+    // const nameValue = Form.useWatch('username', form) || '';
+    // const noteValue = Form.useWatch('note', form) || '';
+
     return (
         <Form
             form={form}
             initialValues={props.data}
             onFinish={onFinish}
             onFinishFailed={onFinishFailed}
+            onValuesChange={onValuesChange}
+            onFieldsChange={onFieldsChange}
             autoComplete="off"
         >
             <Form.Item
@@ -61,7 +77,7 @@ const SearchForm = (props) => {
                     },
                 ]}
             >
-                <Input></Input>
+                <Input />
             </Form.Item>
             <Form.Item
                 name="note"
@@ -74,6 +90,20 @@ const SearchForm = (props) => {
             >
                 <Input />
             </Form.Item>
+            <Form.Item messageVariables={{ another: 'good' }} label="user" rules={[
+                {
+                    required: true,
+                },
+                ]}>
+                <Input />
+            </Form.Item>
+            <Form.Item messageVariables={{ label: 'good' }} label={<span>user</span>} rules={[
+                {
+                    required: true,
+                },
+                ]}>
+                <Input />
+            </Form.Item>
             <Form.Item
                 name="gender"
                 label="Gender"
@@ -84,7 +114,7 @@ const SearchForm = (props) => {
                 ]}
             >
                 <Select
-                    placeholder="Select a option and change input text above"
+                    placeholder="请选择"
                     onChange={onGenderChange}
                     allowClear
                 >
@@ -97,21 +127,21 @@ const SearchForm = (props) => {
                 noStyle
                 shouldUpdate={(prevValues, currentValues) => prevValues.gender !== currentValues.gender}
             >
-                {({ getFieldValue }) =>
-                getFieldValue('gender') === 'other' ? (
-                    <Form.Item
-                        name="customizeGender"
-                        label="Customize Gender"
-                        rules={[
-                            {
-                            required: true,
-                            },
-                        ]}
-                    >
-                        <Input />
-                    </Form.Item>
-                ) : null
-                }
+                {({ getFieldValue }) =>{
+                    return getFieldValue('gender') === 'other' ? (
+                        <Form.Item
+                            name="customizeGender"
+                            label="Customize Gender"
+                            rules={[
+                                {
+                                required: true,
+                                },
+                            ]}
+                        >
+                            <Input />
+                        </Form.Item>
+                    ) : null
+                }}
             </Form.Item>
             <Form.Item
             >
@@ -127,3 +157,54 @@ const SearchForm = (props) => {
 }
 
 export default SearchForm
+
+// const CustomizedForm = ({ onChange, fields }) => (
+//     <Form
+//       name="global_state"
+//       layout="inline"
+//       fields={fields}
+//       onFieldsChange={(_, allFields) => {
+//         console.log(allFields);
+//         // onChange(allFields);
+//       }}
+//     >
+//       <Form.Item
+//         name="username"
+//         label="Username"
+//         rules={[
+//           {
+//             required: true,
+//             message: 'Username is required!',
+//           },
+//         ]}
+//       >
+//         <Input />
+//       </Form.Item>
+//     </Form>
+//   );
+  
+//   const App = () => {
+//     const [fields, setFields] = useState([
+//       {
+//         name: ['username'],
+//         value: 'Ant Design',
+//       },
+//     ]);
+//     const getAllValue = () => {
+//         console.log(fields);
+//     }
+//     return (
+//       <>
+//         <CustomizedForm
+//           fields={fields}
+//           onChange={(newFields) => {
+//             setFields(newFields);
+//             getAllValue();
+//           }}
+//         />
+//         <pre className="language-bash">{JSON.stringify(fields, null, 2)}</pre>
+//       </>
+//     );
+//   };
+  
+//   export default App;
